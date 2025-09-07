@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import entidad.Categoria;
-import entidad.Producto;
 
 public class DaoCategoria {
 	
@@ -51,7 +50,7 @@ public class DaoCategoria {
 	
 	public int eliminarCategoria(Categoria categoria) {
 		
-		String query = "DELETE FROM Categorias WHERE IdCategoria ="+ categoria.getIdCategoria();
+		String query = "DELETE FROM Categorias WHERE IdCategoria = "+ categoria.getIdCategoria();
 		
 		
 		Connection cn = null;
@@ -74,6 +73,28 @@ public class DaoCategoria {
 		
 		
 	}
+	
+	public int modificarCategoria(Categoria categoria) {
+	    String query = "UPDATE Categorias SET Nombre = '" 
+	                 + categoria.getNombre() + "' " 
+	                 + "WHERE IdCategoria = " + categoria.getIdCategoria();
+
+	    Connection cn = null;
+	    int filas = 0;
+
+	    try {
+	        cn = DriverManager.getConnection(host + dbName, user, pass);
+	        Statement st = cn.createStatement();
+	        filas = st.executeUpdate(query);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return filas;  
+	}
+
+	
+	
 	
 	
      public ArrayList<Categoria> obtenerTodasLasCategoria() {

@@ -24,7 +24,7 @@ public class DaoProducto {
 	
 	public int agregarProducto(Producto producto) {
 		
-		String query = "INSERT INTO Producto(Codigo, Nombre, Precio, Stock, IdCategoria) VALUES ('" 
+		String query = "INSERT INTO Productos(Codigo, Nombre, Precio, Stock, IdCategoria) VALUES ('" 
 			    + producto.getCodigo() + "', '" 
 			    + producto.getNombre() + "', " 
 			    + producto.getPrecio() + ", " 
@@ -53,30 +53,47 @@ public class DaoProducto {
 	
 	
 	public int eliminarProducto(Producto producto) {
-		
-		String query = "DELETE FROM Productos WHERE Codigo = ?";
-		
-		
-		Connection cn = null;
-		
-		int filas = 0;
-		
-		try {
-			
-			cn = DriverManager.getConnection(host+dbName,user,pass);
+	    
+		String query = "DELETE FROM Productos WHERE Codigo = '" + producto.getCodigo() + "'";
+	    
+	    Connection cn = null;
+	    int filas = 0;
+	    
+	    try {
+	        cn = DriverManager.getConnection(host + dbName, user, pass);
 	        Statement st = cn.createStatement();
-	        filas = st.executeUpdate(query); 
-
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			
-		}
-		
-		return filas;
-		
-		
+	        filas = st.executeUpdate(query);
+	    }
+	    catch(Exception e){
+	        e.printStackTrace();
+	    }
+	    
+	    return filas;
 	}
+	
+	public int actualizarProducto(Producto p) {
+	    String query =
+	        "UPDATE Productos SET " +
+	        "Nombre = '" + p.getNombre() + "', " +
+	        "Precio = " + p.getPrecio() + ", " +
+	        "Stock = " + p.getStock() + ", " +
+	        "IdCategoria = " + p.getIdCategoria() + " " +
+	        "WHERE Codigo = '" + p.getCodigo() + "'";
+
+	    Connection cn = null;
+	    int filas = 0;
+
+	    try {
+	        cn = DriverManager.getConnection(host + dbName, user, pass);
+	        Statement st = cn.createStatement();
+	        filas = st.executeUpdate(query);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return filas; 
+	}
+
+
 	
 	
 	public ArrayList<Producto> obtenerTodosLosProducto() {
@@ -88,7 +105,7 @@ public class DaoProducto {
 		try {
 			cn = DriverManager.getConnection(host+dbName,user,pass);
 			Statement st = cn.createStatement();
-			String query = "Select * from Producto";
+			String query = "Select * from Productos";
 			ResultSet rs= st.executeQuery(query);
 			
 			while(rs.next()) {
